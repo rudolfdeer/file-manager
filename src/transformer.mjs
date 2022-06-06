@@ -1,4 +1,5 @@
 import { Transform } from 'stream';
+import { read } from './fs/read.mjs';
 import { goToDirectory } from './nwd/cd.mjs';
 import { listFilesInDirectory } from './nwd/ls.mjs';
 import { goToUpperDirectory } from './nwd/up.mjs';
@@ -18,6 +19,7 @@ class Transformer extends Transform {
         goToUpperDirectory();
         break;
       }
+
       case inputString.match(/^cd\s/)?.input: {
         const directory = inputString.split(' ')[1];
         try {
@@ -27,10 +29,22 @@ class Transformer extends Transform {
         }
         break;
       }
+
       case 'ls': {
         listFilesInDirectory();
         break;
       }
+
+      case inputString.match(/^cat\s/)?.input: {
+        const pathToFile = inputString.split(' ')[1];
+        try {
+          read(pathToFile);
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
       default: {
         outputString = 'Invalid input\n';
       }
