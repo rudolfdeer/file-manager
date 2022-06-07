@@ -201,4 +201,4 @@ class Transformer extends Transform {
   }
 }
 
-export const transformer = () => new Transformer();
+export const parser = () => new Transformer();
