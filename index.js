@@ -16,7 +16,7 @@ process.stdout.write(welcomeMsg);
 process.stdout.write(currentPathMsg);
 
 const inputStream = process.stdin;
-const transformStream = parser();
+const transformStream = parser(username);
 const outputStream = process.stdout;
 
 pipeline(inputStream, transformStream, outputStream, (err) => {

@@ -17,9 +17,12 @@ import { getUsername } from './os/username.mjs';
 import { compress } from './zip/compress.js';
 import { decompress } from './zip/decompress.js';
 
+const invalidInputMsg = 'Invalid input\n';
+
 class Transformer extends Transform {
-  constructor() {
+  constructor(username) {
     super();
+    this.username = username;
   }
 
   _transform(chunk, encoding, callback) {
@@ -38,7 +41,7 @@ class Transformer extends Transform {
         try {
           goToDirectory(directory);
         } catch (err) {
-          outputString = 'Invalid input';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -53,7 +56,7 @@ class Transformer extends Transform {
         try {
           read(pathToFile);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -63,7 +66,7 @@ class Transformer extends Transform {
         try {
           create(fileName);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -74,7 +77,7 @@ class Transformer extends Transform {
         try {
           rename(pathToFile, newFilename);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -85,7 +88,7 @@ class Transformer extends Transform {
         try {
           copy(pathToFile, pathToNewDirectory);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -96,7 +99,7 @@ class Transformer extends Transform {
         try {
           move(pathToFile, pathToNewDirectory);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -106,7 +109,7 @@ class Transformer extends Transform {
         try {
           remove(pathToFile);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -115,7 +118,7 @@ class Transformer extends Transform {
         try {
           getEol();
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -124,7 +127,7 @@ class Transformer extends Transform {
         try {
           getCpus();
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -133,7 +136,7 @@ class Transformer extends Transform {
         try {
           getHomeDir();
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -142,7 +145,7 @@ class Transformer extends Transform {
         try {
           getUsername();
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -151,7 +154,7 @@ class Transformer extends Transform {
         try {
           getArchitecture();
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -161,7 +164,7 @@ class Transformer extends Transform {
         try {
           calcHash(pathToFile);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -172,7 +175,7 @@ class Transformer extends Transform {
         try {
           compress(pathToFile, pathToDestination);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
@@ -183,13 +186,19 @@ class Transformer extends Transform {
         try {
           decompress(pathToFile, pathToDestination);
         } catch (err) {
-          outputString = 'Invalid input\n';
+          outputString = invalidInputMsg;
         }
         break;
       }
 
+      case inputString.match(/^.exit/)?.input: {
+        const goodbyeMsg = `\nThank you for using File Manager, ${this.username}!\n`;
+        process.stdout.write(goodbyeMsg);
+        process.exit();
+      }
+
       default: {
-        outputString = 'Invalid input\n';
+        outputString = invalidInputMsg;
       }
     }
 
@@ -201,4 +210,4 @@ class Transformer extends Transform {
   }
 }
 
-export const parser = () => new Transformer();
+export const parser = (username) => new Transformer(username);

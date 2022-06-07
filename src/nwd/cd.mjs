@@ -7,5 +7,4 @@ export const goToDirectory = (directory) => {
   } else {
     return false;
   }
-  
 }
