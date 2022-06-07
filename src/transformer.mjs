@@ -5,6 +5,7 @@ import { remove } from './fs/delete.mjs';
 import { move } from './fs/move.mjs';
 import { read } from './fs/read.mjs';
 import { rename } from './fs/rename.mjs';
+import { calcHash } from './hash/hash.js';
 import { goToDirectory } from './nwd/cd.mjs';
 import { listFilesInDirectory } from './nwd/ls.mjs';
 import { goToUpperDirectory } from './nwd/up.mjs';
@@ -13,6 +14,8 @@ import { getCpus } from './os/cpus.mjs';
 import { getEol } from './os/eol.mjs';
 import { getHomeDir } from './os/homedir.mjs';
 import { getUsername } from './os/username.mjs';
+import { compress } from './zip/compress.js';
+import { decompress } from './zip/decompress.js';
 
 class Transformer extends Transform {
   constructor() {
@@ -147,6 +150,38 @@ class Transformer extends Transform {
       case inputString.match(/^os\s--architecture/)?.input: {
         try {
           getArchitecture();
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^hash\s/)?.input: {
+        const pathToFile = inputString.split(' ')[1];
+        try {
+          calcHash(pathToFile);
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^compress\s/)?.input: {
+        const pathToFile = inputString.split(' ')[1];
+        const pathToDestination = inputString.split(' ')[2];
+        try {
+          compress(pathToFile, pathToDestination);
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^decompress\s/)?.input: {
+        const pathToFile = inputString.split(' ')[1];
+        const pathToDestination = inputString.split(' ')[2];
+        try {
+          decompress(pathToFile, pathToDestination);
         } catch (err) {
           outputString = 'Invalid input\n';
         }

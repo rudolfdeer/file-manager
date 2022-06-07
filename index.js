@@ -14,12 +14,9 @@ const inputStream = process.stdin;
 const transformStream = transformer();
 const outputStream = process.stdout;
 
-
-
 pipeline(inputStream, transformStream, outputStream, (err) => {
   if (err) {
     process.stderr.write(`Operation failed: ${err}\n`);
-    //process.exit(1);
   }
 });
 
