@@ -8,6 +8,11 @@ import { rename } from './fs/rename.mjs';
 import { goToDirectory } from './nwd/cd.mjs';
 import { listFilesInDirectory } from './nwd/ls.mjs';
 import { goToUpperDirectory } from './nwd/up.mjs';
+import { getArchitecture } from './os/architecture.mjs';
+import { getCpus } from './os/cpus.mjs';
+import { getEol } from './os/eol.mjs';
+import { getHomeDir } from './os/homedir.mjs';
+import { getUsername } from './os/username.mjs';
 
 class Transformer extends Transform {
   constructor() {
@@ -97,6 +102,51 @@ class Transformer extends Transform {
         const pathToFile = inputString.split(' ')[1];
         try {
           remove(pathToFile);
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^os\s--EOL/)?.input: {
+        try {
+          getEol();
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^os\s--cpus/)?.input: {
+        try {
+          getCpus();
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^os\s--homedir/)?.input: {
+        try {
+          getHomeDir();
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^os\s--username/)?.input: {
+        try {
+          getUsername();
+        } catch (err) {
+          outputString = 'Invalid input\n';
+        }
+        break;
+      }
+
+      case inputString.match(/^os\s--architecture/)?.input: {
+        try {
+          getArchitecture();
         } catch (err) {
           outputString = 'Invalid input\n';
         }
